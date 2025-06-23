@@ -342,6 +342,20 @@ app.get("/api/admin/get-pacakages", async (req, res) => {
   }
 });
 
+app.delete("/api/admin/delete-packages", upload.none(), async (req, res) => {
+  const { title, id } = req.query;
+  console.log(title);
+  console.log(id);
+
+  try {
+    const result = await pool.query("DELETE FROM packages WHERE id = $1", [id]);
+    res.status(200).json({ message: `Deleted ${title} successfully` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.post("/api/logout", (req, res) => {
   req.logOut((err) => {
     if (err) return res.status(500).json({ message: "Logout failed" });
