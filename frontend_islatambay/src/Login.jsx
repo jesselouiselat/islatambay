@@ -1,0 +1,98 @@
+import { useState, useEffect } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
+import axios from "axios";
+import axiosInstance from "./api/AxiosInstance";
+import GoogleLogin from "./GoogleLogin";
+import { useAuth } from "./context/UserContext";
+
+import Register from "./Register";
+
+function Login() {
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  const [loginDetails, setLoginDetails] = useState({
+    email: "",
+    password: "",
+  });
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setLoginDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    try {
+      if (!loginDetails.email || !loginDetails.password) {
+        alert("Please fill both fields");
+        return;
+      }
+      const res = await axiosInstance.post("/api/login", loginDetails);
+      setUser(res.data.user);
+      navigate("/dashboard", { state: { message: "Login successfuly!" } });
+      console.log(res.status);
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+        alert(error.response.data.message || "Wrong email or password");
+      } else {
+        console.log(error);
+        alert("Something went wrong!", error.response.status);
+      }
+    }
+  }
+
+  return (
+    <section className="d-flex text-center justify-content-center align-items-center vh-100">
+      <div className="col-5 form-signin p-3">
+        <h1 className="h3  fw-normal">Please sign in to</h1>
+        <h1 className="fs-bold">Sikaeom</h1>
+
+        <form action="" onSubmit={handleSubmit}>
+          <div className="form-floating">
+            <input
+              id="email"
+              className="form-control rounded-1"
+              onChange={handleChange}
+              value={loginDetails.email}
+              name="email"
+              placeholder=""
+            />
+            <label htmlFor="email">Email address</label>
+
+            <div className="form-floating mb-4">
+              <input
+                id="password"
+                type="password"
+                className="form-control"
+                onChange={handleChange}
+                value={loginDetails.password}
+                name="password"
+                placeholder=""
+              />
+              <label htmlFor="password">Password</label>
+            </div>
+          </div>
+
+          <button className="w-100 btn btn-lg btn-primary" type="submit">
+            Log in
+          </button>
+          <NavLink
+            to="/register"
+            className="w-100 btn btn-outline-primary mt-2"
+          >
+            Sign up
+          </NavLink>
+        </form>
+
+        <GoogleLogin />
+      </div>
+    </section>
+  );
+}
+
+export default Login;
