@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "./api/AxiosInstance";
-import Header from "./Header";
 import Packages from "./Packages";
 import Amenities from "./Amenities";
 import Contact from "./Contact";
@@ -16,7 +15,6 @@ function Home() {
       {/* {loggedIn && isAdmin ? <AdminDashboard /> : null} */}
 
       <Hero />
-      <Header />
       <Amenities />
       <Packages />
       <Contact />

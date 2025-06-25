@@ -3,17 +3,15 @@ import axiosInstance from "./api/AxiosInstance";
 
 function RemoveAdmin({ onSuccess }) {
   const [targetEmail, setTargetEmail] = useState("");
-  const [userAdminPassword, setUserAdminPassword] = useState("");
+  const [showConfirmButton, setShowConfirmButton] = useState(false);
 
   async function promoteUser(event) {
     event.preventDefault();
     try {
       const res = await axiosInstance.post("/api/admin/remove-admin", {
         targetEmail,
-        userAdminPassword,
       });
       setTargetEmail("");
-      setUserAdminPassword("");
       console.log(res.data.message);
       alert(res.data.message);
       onSuccess();
@@ -25,11 +23,11 @@ function RemoveAdmin({ onSuccess }) {
 
   return (
     <section>
-      <div className="card mt-3  p-2">
+      <div className="card mt-3 mb-4 p-2">
         <div className="card-header border-0">
-          <h3 className="card-title">Remove admin</h3>
+          <h3 className="card-title">Remove Admin</h3>
         </div>
-        <form onSubmit={promoteUser}>
+        <form>
           <div className="form-floating">
             <input
               className="form-control"
@@ -37,6 +35,7 @@ function RemoveAdmin({ onSuccess }) {
               id="email"
               name="email"
               placeholder="email"
+              required
               value={targetEmail}
               onChange={(e) => setTargetEmail(e.target.value)}
             />
@@ -44,24 +43,23 @@ function RemoveAdmin({ onSuccess }) {
               Email to remove
             </label>
           </div>
-          <div className="form-floating">
-            <input
-              className="form-control"
-              type="password"
-              id="password"
-              name="password"
-              placeholder="password"
-              value={userAdminPassword}
-              onChange={(e) => setUserAdminPassword(e.target.value)}
-            />
-            <label className="form-label" htmlFor="password">
-              Your password
-            </label>
-          </div>
-          <button className="btn btn-warning w-100 mt-2" type="submit">
-            Submit
-          </button>
         </form>
+        <button
+          className="btn btn-warning w-100 mt-2"
+          type="submit"
+          onClick={() => setShowConfirmButton(true)}
+        >
+          Submit
+        </button>
+        {showConfirmButton && (
+          <button
+            className="btn btn-success w-100 mt-2"
+            type="submit"
+            onClick={promoteUser}
+          >
+            Confirm Submit
+          </button>
+        )}
       </div>
     </section>
   );

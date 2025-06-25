@@ -36,12 +36,11 @@ function Login() {
       navigate("/dashboard", { state: { message: "Login successfuly!" } });
       console.log(res.status);
     } catch (error) {
+      console.error(error);
       if (error.response) {
-        console.log(error.response);
-        alert(error.response.data.message || "Wrong email or password");
+        alert(error.response.data.message || "Something went wrong");
       } else {
-        console.log(error);
-        alert("Something went wrong!", error.response.status);
+        alert("Network error or server not responding");
       }
     }
   }

@@ -7,22 +7,21 @@ import { Button } from "react-scroll";
 function Packages() {
   const { user } = useAuth();
   const [packages, setPackages] = useState([]);
+  const [confirmingId, setConfrimingId] = useState(null);
+
+  async function getPackages() {
+    try {
+      const result = await axiosInstance("/api/admin/get-pacakages");
+
+      setPackages(result.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
-    async function getPackages() {
-      try {
-        const result = await axiosInstance("/api/admin/get-pacakages");
-        console.log(result.data);
-
-        setPackages(result.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
     getPackages();
   }, []);
-
-  async function handleDelete() {}
 
   async function handleSubmit(formData) {
     try {
@@ -30,7 +29,24 @@ function Packages() {
         "/api/admin/upload/packages",
         formData
       );
+      getPackages();
       alert(res.data.message);
+    } catch (error) {
+      console.error(error);
+      alert(error.response.data.message);
+    }
+  }
+
+  async function handleDelete(id, title) {
+    try {
+      const result = await axiosInstance.delete("/api/admin/delete-packages", {
+        params: {
+          id,
+          title,
+        },
+      });
+      getPackages();
+      alert(result.data.message);
     } catch (error) {
       console.error(error);
       alert(error.response.data.message);
@@ -44,22 +60,44 @@ function Packages() {
       </div>
       <div className="row row-cols-1 row-cols-md-3 text-center justify-content-center">
         {packages.map((plan) => (
-          <div className="col" key={plan.id}>
-            <div className="card rounded-4 m-4 shadow-lg">
-              <div className="card-header d-flex justify-content-center">
-                <h5 className="p-1">{plan.title}</h5>
-                {user && user.isAdmin && (
-                  <button
-                    className="btn btn-sm btn-danger ms-auto"
-                    type="button"
-                    onClick={handleDelete(plan.id)}
-                  >
-                    Delete
-                  </button>
+          <div className="col h-100" key={plan.id}>
+            <div className="card h-100 d-flex flex-column rounded-4 m-4 shadow-lg p-3">
+              <div className="card-header">
+                <div
+                  className={`d-flex align-items-center ${
+                    user && user.isAdmin
+                      ? "justify-content-between"
+                      : "justify-content-center"
+                  }`}
+                >
+                  <h5 className="p-1 mb-0 text-center">{plan.title}</h5>{" "}
+                  {user && user.isAdmin && (
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      type="button"
+                      onClick={() => setConfrimingId(plan.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+
+                {confirmingId === plan.id && (
+                  <div className="mt-2">
+                    <button
+                      className="btn btn-danger w-100"
+                      onClick={() => handleDelete(plan.id, plan.title)}
+                    >
+                      Confirm Delete
+                    </button>
+                  </div>
                 )}
               </div>
-              <div className="card-body">
-                <h3 className="card-title pricing-card-title">{plan.price}</h3>
+
+              <div className="card-body flex-grow-1">
+                <h3 className="card-title pricing-card-title">
+                  ₱ {plan.price}
+                </h3>
                 <ul className="list-unstyled my-4">
                   {plan.features.map((feature, index) => (
                     <li key={index}>{feature}</li>

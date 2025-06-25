@@ -1,0 +1,85 @@
+import { useState, useRef, useEffect } from "react";
+import axiosInstance from "./api/AxiosInstance";
+
+function ChatBox() {
+  const [userInput, setUserInput] = useState("");
+  const [chat, setChat] = useState([]);
+  const chatEndRef = useRef(null);
+
+  // Auto-scroll to bottom on new message
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat]);
+
+  const sendInquiry = async () => {
+    if (!userInput.trim()) return;
+
+    try {
+      const userMessage = { role: "user", message: userInput };
+
+      setChat((prevChat) => [...prevChat, userMessage]);
+
+      const result = await axiosInstance.post("/api/ask-gemini", {
+        message: userInput,
+      });
+
+      const botMessage = {
+        role: "bot",
+        message: result.data.message,
+      };
+      console.log(result.data.message);
+
+      setChat((prevChat) => [...prevChat, botMessage]);
+      setUserInput("");
+    } catch (error) {
+      console.error("❌ Gemini error:", error);
+    }
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === "Enter") sendInquiry();
+  };
+
+  return (
+    <div
+      className="container border rounded-4 p-3"
+      style={{ height: "500px", display: "flex", flexDirection: "column" }}
+    >
+      {/* Chat message container */}
+      <div className="flex-grow-1 overflow-auto mb-3" id="chat-messages">
+        {chat.map((msg, index) => (
+          <div
+            key={index}
+            className={`mb-2 text-${msg.role === "user" ? "end" : "start"}`}
+          >
+            <span
+              className={`badge ${
+                msg.role === "user" ? "bg-primary" : "bg-secondary"
+              }`}
+            >
+              {msg.message}
+            </span>
+          </div>
+        ))}
+        <div ref={chatEndRef} />
+      </div>
+
+      {/* Input box */}
+      <div className="input-group">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          onKeyDown={handleEnter}
+        />
+        <button className="btn btn-success" onClick={sendInquiry}>
+          Send
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default ChatBox;

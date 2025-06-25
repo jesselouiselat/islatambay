@@ -15,7 +15,6 @@ export const UserProvider = ({ children }) => {
       try {
         const res = await axiosInstance.get("/api/check-auth");
         setUser(res.data.user);
-        console.log(res.data.user);
       } catch (error) {
         if (error.response?.status === 401) {
           setUser(null);
@@ -34,10 +33,8 @@ export const UserProvider = ({ children }) => {
       const res = await axiosInstance.post("/api/logout");
       setUser(null);
       navigate("/");
-      //   alert(res.data.message);
     } catch (error) {
       console.error(error);
-      //   alert(error.response.data.message);
     }
   };
 

@@ -1,5 +1,6 @@
 import { Routes, Route, Router } from "react-router-dom";
 import Home from "./Home.jsx";
+import Amenities from "./Amenities.jsx";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import Dashboard from "./Dashboard.jsx";
@@ -14,6 +15,8 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/amenities" element={<Amenities />} />
+
       <Route
         path="/dashboard"
         element={

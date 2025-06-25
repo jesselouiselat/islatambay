@@ -1,10 +1,12 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { Link } from "react-scroll";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import Dashboard from "./Dashboard";
 import { useAuth } from "./context/UserContext";
 
 function NavBar() {
+  const { user, setUser, logout } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { user, setUser, loading, logout } = useAuth();
+
   const navLinks = [
     { path: "home", label: "Home" },
     { path: "about", label: "About" },
@@ -13,7 +15,17 @@ function NavBar() {
     { path: "contact", label: "Contact" },
   ];
 
+  function handleNavClick(sectionId) {
+    if (location.pathname === "/home" || location.pathname === "/") {
+      const component = document.getElementById(sectionId);
+      if (component) component.scrollIntoView({});
+    } else {
+      navigate(`/home#${sectionId}`);
+    }
+  }
+
   function handleLogOut() {
+    setUser(null);
     logout();
   }
 
@@ -37,25 +49,41 @@ function NavBar() {
           <ul className="navbar-nav ms-auto ">
             {navLinks.map((link, index) => (
               <li className="nav-item" key={index}>
-                <Link
+                <button
                   to={link.path}
-                  smooth={true}
+                  smooth="true"
                   duration={100}
-                  className="nav-link"
+                  className="nav-link btn btn-link"
+                  onClick={() => handleNavClick(link.path)}
                 >
                   {link.label}
-                </Link>
+                </button>
               </li>
             ))}
+            {user && user.isAdmin && (
+              <div className="ms-md-auto">
+                <NavLink
+                  to="/admin-dashboard"
+                  className="btn btn-outline-success ms-4 "
+                >
+                  Admin Dashboard
+                </NavLink>
+              </div>
+            )}
             <li className="ms-md-auto">
               {user ? (
-                <button
-                  className="btn btn-outline-danger ms-4"
-                  onClick={handleLogOut}
-                  type="button"
-                >
-                  Log Out
-                </button>
+                <>
+                  <NavLink className="btn btn-primary ms-4" to="/dashboard">
+                    My Account
+                  </NavLink>
+                  <button
+                    className="btn btn-outline-danger ms-4"
+                    onClick={handleLogOut}
+                    type="button"
+                  >
+                    Log Out
+                  </button>
+                </>
               ) : (
                 <>
                   <NavLink to="/login" className="btn btn-primary ms-4 me-3">

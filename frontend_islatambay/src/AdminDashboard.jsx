@@ -32,19 +32,6 @@ function AdminDashboard() {
     refreshAdminList();
   }, []);
 
-  async function handleSubmit(section, formData) {
-    try {
-      const result = await axiosInstance.post(
-        `/api/admin/upload/${section}`,
-        formData
-      );
-      alert(`New ${section} uploaded successfully.`);
-    } catch (error) {
-      console.error(error);
-      alert("Error uploading.");
-    }
-  }
-
   return (
     <section className="container">
       {user.isAdmin ? (

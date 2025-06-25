@@ -15,6 +15,9 @@ import GoogleStrategy from "passport-google-oauth2";
 
 // For cloud storage
 import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+
+import { GoogleGenAI } from "@google/genai";
 
 import env from "dotenv";
 
@@ -22,6 +25,8 @@ const app = express();
 const port = 5000;
 const saltRounds = 11;
 env.config();
+
+const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 
 const pool = new Pool({
   user: process.env.POOL_USER,
@@ -42,7 +47,16 @@ app.use(
   })
 );
 
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "islatambay",
+    allowed_formats: ["jpg", "png", "jpeg"],
+  },
+});
+
 const upload = multer();
+const cloudUpload = multer({ storage });
 
 app.use(express.json());
 app.use(
@@ -58,9 +72,9 @@ app.use(
 // ==================== IMAGE/VIDEO STORAGE (CLOUDINARY) ====================
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME_REPLACE,
+  api_key: process.env.CLOUDINARY_API_KEY_REPLACE,
+  api_secret: process.env.CLOUDINARY_API_SECRET_REPLACE,
 });
 
 // ==================== LOGIN ====================
@@ -236,6 +250,25 @@ app.get(
   })
 );
 
+app.post("/api/ask-gemini", async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    const result = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `${message}`,
+    });
+    console.log(result);
+    console.log("=========================");
+
+    console.log(result.text);
+
+    res.status(200).json({ message: result.text });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 app.get("/api/admin/get-admin-users", async (req, res) => {
   const result = await pool.query(
     "SELECT * FROM users WHERE is_admin = true ORDER BY email ASC"
@@ -245,28 +278,24 @@ app.get("/api/admin/get-admin-users", async (req, res) => {
 });
 
 app.post("/api/admin/promote-user", async (req, res) => {
-  const { targetEmail, userAdminPassword } = req.body;
-  const currentUser = req.user;
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Not authenticated" });
-  }
+  const { targetEmail } = req.body;
 
   try {
-    const checkResult = await pool.query("SELECT * FROM users WHERE id = $1", [
-      currentUser.id,
-    ]);
-    const user = checkResult.rows[0];
-    const match = await bcrypt.compare(userAdminPassword, user.password);
-    if (!match) {
-      return res.status(403).json({ message: "Incorrect password" });
-    }
     const update = await pool.query(
-      "UPDATE users SET is_admin = true WHERE email = $1",
+      "UPDATE users SET is_admin = true WHERE email = $1 RETURNING *",
       [targetEmail]
     );
 
+    const user = update.rows[0];
+
     if (update.rowCount === 0) {
       return res.status(404).json({ message: "User not found." });
+    }
+
+    if (user.is_admin == true) {
+      return res
+        .status(404)
+        .json({ message: `${targetEmail} is already an admin` });
     }
 
     res.status(200).json({ message: `${targetEmail} is now an admin.` });
@@ -277,32 +306,28 @@ app.post("/api/admin/promote-user", async (req, res) => {
 });
 
 app.post("/api/admin/remove-admin", async (req, res) => {
-  const { targetEmail, userAdminPassword } = req.body;
-  const currentUser = req.user;
+  const { targetEmail } = req.body;
 
   if (
     targetEmail === "islatambayfreediving@gmail.com" ||
-    target === "jesselouiselat@gmail.com"
+    targetEmail === "jesselouiselat@gmail.com"
   ) {
-    return res.status(401).json({ message: "Can't remove the main admin" });
-  }
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Not authenticated" });
+    return res.status(401).json({ message: "Can't remove a main admin" });
   }
 
   try {
-    const checkResult = await pool.query("SELECT * FROM users WHERE id = $1", [
-      currentUser.id,
-    ]);
-    const user = checkResult.rows[0];
-    const match = await bcrypt.compare(userAdminPassword, user.password);
-    if (!match) {
-      return res.status(403).json({ message: "Incorrect password" });
-    }
     const update = await pool.query(
-      "UPDATE users SET is_admin = false WHERE email = $1",
+      "UPDATE users SET is_admin = false WHERE email = $1  RETURNING *",
       [targetEmail]
     );
+
+    const user = update.rows[0];
+
+    if (user.is_admin == false) {
+      return res
+        .status(404)
+        .json({ message: `${targetEmail} is already a regular user` });
+    }
 
     if (update.rowCount === 0) {
       return res.status(404).json({ message: "User not found." });
@@ -314,6 +339,92 @@ app.post("/api/admin/remove-admin", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error." });
+  }
+});
+
+app.post(
+  "/api/admin/upload/heroes",
+  cloudUpload.single("image"),
+  async (req, res) => {
+    const { title, description } = req.body;
+    const imageUrl = req.file.path;
+    const public_id = req.file.filename;
+
+    try {
+      const result = await pool.query(
+        "INSERT INTO heroes (title, description, image, public_id) VALUES ($1, $2, $3, $4)",
+        [title, description, imageUrl, public_id]
+      );
+      res.status(200).json({ message: `${title} is added successfully` });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+app.get("/api/admin/get-heroes", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM heroes");
+    const heroes = result.rows;
+    res.status(200).json(heroes);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.delete("/api/admin/delete-heroes", async (req, res) => {
+  const { id, title, public_id } = req.query;
+
+  try {
+    await cloudinary.uploader.destroy(public_id);
+    const result = await pool.query("DELETE FROM heroes WHERE id = $1", [id]);
+    res.status(200).json({ message: `${title} is successfullt deleted` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.post(
+  "/api/admin/upload/amenities",
+  cloudUpload.single("image"),
+  async (req, res) => {
+    const { title } = req.body;
+    const imageUrl = req.file.path;
+    const public_id = req.file.filename;
+    try {
+      const result = await pool.query(
+        "INSERT INTO amenities (title, image, public_id) VALUES ($1, $2, $3)",
+        [title, imageUrl, public_id]
+      );
+      res.status(200).json({ message: `${title} is added` });
+    } catch (error) {
+      console.error(error);
+      alert("Server Error");
+    }
+  }
+);
+
+app.get("/api/admin/get-amenities", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM amenities");
+    const amenities = result.rows;
+    res.status(200).json(amenities);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.delete("/api/admin/delete-amenities", async (req, res) => {
+  const { id, title, public_id } = req.query;
+  try {
+    await cloudinary.uploader.destroy(public_id);
+    const result = await pool.query("DELETE FROM amenitites WHERE id = $1", [
+      id,
+    ]);
+    req.status(200).json({ message: `${title} is successfully deleted` });
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -344,8 +455,6 @@ app.get("/api/admin/get-pacakages", async (req, res) => {
 
 app.delete("/api/admin/delete-packages", upload.none(), async (req, res) => {
   const { title, id } = req.query;
-  console.log(title);
-  console.log(id);
 
   try {
     const result = await pool.query("DELETE FROM packages WHERE id = $1", [id]);

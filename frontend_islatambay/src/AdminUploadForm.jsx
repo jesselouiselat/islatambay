@@ -49,9 +49,12 @@ function AdminUploadForm({ sectionName, onSubmit }) {
     }
 
     onSubmit(formData);
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
+
+    setTitle("");
+    setDescription("");
+    setFeatures([""]);
+    setImage(null);
+    setPrice(0);
   }
 
   // ================================================================
