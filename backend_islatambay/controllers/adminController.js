@@ -15,7 +15,7 @@ export const promoteUser = async (req, res) => {
     targetEmail,
   ]);
 
-  if (!result) {
+  if (!checkResult) {
     return res.status(404).json({ message: "User not found." });
   }
 
@@ -48,10 +48,7 @@ export const promoteUser = async (req, res) => {
 export const removeAdmin = async (req, res) => {
   const { targetEmail } = req.body;
 
-  if (
-    targetEmail === "islatambayfreediving@gmail.com" ||
-    targetEmail === "jesselouiselat@gmail.com"
-  ) {
+  if (targetEmail === "admin@email.com") {
     return res.status(401).json({ message: "Can't remove a main admin" });
   }
 
@@ -59,7 +56,7 @@ export const removeAdmin = async (req, res) => {
     targetEmail,
   ]);
 
-  if (!result) {
+  if (!checkResult) {
     return res.status(404).json({ message: "User not found." });
   }
 

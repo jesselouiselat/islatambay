@@ -8,12 +8,12 @@ function PromoteToAdmin({ onSuccess }) {
   async function promoteUser(event) {
     event.preventDefault();
     try {
-      const res = await axiosInstance.post("/api/admin/promote-user", {
+      const result = await axiosInstance.post("/api/admin/promote-user", {
         targetEmail,
       });
       setTargetEmail("");
-      console.log(res.data.message);
-      alert(res.data.message);
+      console.log(result.data.message);
+      alert(result.data.message);
       onSuccess();
     } catch (error) {
       console.error(error);

@@ -38,12 +38,9 @@ export const askGemini = async (req, res) => {
           parts: [
             {
               text: `
-    You are a customer service agent for ISLATAMBAY Freediving Resort.
-    
-    Here is all our resort data:
-    
+    You are a customer service agent for ISLATAMBAY Freediving Resort. Always be nice and approachable in tone.    Here is all our resort data:
+    Make your tone inviting and infomative.
     ${allTablesFormatted}
-    
     Answer this user question based only on the above info:
     "${message}"
               `,
