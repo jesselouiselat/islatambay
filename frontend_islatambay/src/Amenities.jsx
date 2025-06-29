@@ -11,7 +11,9 @@ function Amenities() {
 
   async function getAmenitites() {
     try {
-      const result = await axiosInstance.get("/api/admin/get-amenities");
+      const result = await axiosInstance.get(
+        "/api/admin/amenities/get-amenities"
+      );
 
       setAmenities(result.data);
     } catch (error) {
@@ -26,7 +28,7 @@ function Amenities() {
   async function handlesubmit(formData) {
     try {
       const result = await axiosInstance.post(
-        "/api/admin/upload/amenities",
+        "/api/admin/amenities/add-amenities",
         formData
       );
       getAmenitites();
@@ -38,13 +40,16 @@ function Amenities() {
 
   async function handleDelete(id, title, public_id) {
     try {
-      const result = await axiosInstance.delete("/api/admin/delete-amenities", {
-        params: {
-          id,
-          title,
-          public_id,
-        },
-      });
+      const result = await axiosInstance.delete(
+        "/api/admin/amenities/delete-amenities",
+        {
+          params: {
+            id,
+            title,
+            public_id,
+          },
+        }
+      );
       getAmenitites();
       alert(result.data.message);
     } catch (error) {

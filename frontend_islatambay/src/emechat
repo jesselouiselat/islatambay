@@ -1,44 +1,44 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axiosInstance from "./api/AxiosInstance";
 
 function ChatBox() {
   const [userInput, setUserInput] = useState("");
   const [chat, setChat] = useState([]);
-  const chatEndRef = useRef();
+  const chatEndRef = useRef(null);
 
+  // Auto-scroll to bottom on new message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
-  async function sendInquiry() {
+  const sendInquiry = async () => {
     if (!userInput.trim()) return;
 
     try {
-      const userMessage = {
-        role: "user",
-        message: userInput,
-      };
+      const userMessage = { role: "user", message: userInput };
+
       setChat((prevChat) => [...prevChat, userMessage]);
 
-      const result = await axiosInstance.post("/api/ai/ask-gemini", {
+      const result = await axiosInstance.post("/api/ask-gemini", {
         message: userInput,
       });
-      setUserInput("");
 
       const botMessage = {
         role: "bot",
         message: result.data.message,
       };
+      console.log(result.data.message);
 
       setChat((prevChat) => [...prevChat, botMessage]);
+      setUserInput("");
     } catch (error) {
-      console.error(error);
+      console.error("❌ Gemini error:", error);
     }
-  }
+  };
 
-  function handleEnter(event) {
-    if (event.key === "Enter") sendInquiry();
-  }
+  const handleEnter = (e) => {
+    if (e.key === "Enter") sendInquiry();
+  };
 
   return (
     <div
@@ -56,12 +56,6 @@ function ChatBox() {
               className={`badge ${
                 msg.role === "user" ? "bg-success" : "bg-primary"
               }`}
-              style={{
-                whiteSpace: "pre-wrap", // keeps line breaks
-                wordBreak: "break-word", // wraps long words
-                maxWidth: "75%", // avoids full-width messages
-                display: "inline-block", // allows wrapping
-              }}
             >
               {msg.message}
             </span>

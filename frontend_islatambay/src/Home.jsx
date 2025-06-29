@@ -10,7 +10,7 @@ import NavBar from "./NavBar";
 
 function Home() {
   return (
-    <div className="container">
+    <div className="">
       <NavBar />
       {/* {loggedIn && isAdmin ? <AdminDashboard /> : null} */}
 

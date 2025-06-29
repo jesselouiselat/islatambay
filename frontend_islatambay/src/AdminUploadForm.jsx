@@ -34,9 +34,13 @@ function AdminUploadForm({ sectionName, onSubmit }) {
     event.preventDefault();
     const formData = new FormData();
 
-    if (sectionName === "heroes" || sectionName === "amenities") {
+    if (
+      sectionName === "heroes" ||
+      sectionName === "amenities" ||
+      sectionName === "aiPrompts"
+    ) {
       formData.append("title", title);
-      if (sectionName === "heroes") {
+      if (sectionName === "heroes" || sectionName === "aiPrompts") {
         formData.append("description", description);
       }
       formData.append("image", image);
@@ -61,9 +65,51 @@ function AdminUploadForm({ sectionName, onSubmit }) {
 
   return (
     <section>
+      {sectionName === "aiPrompts" && (
+        <div className="container">
+          <div className="card col-md-7 mx-auto mb-3 mt-4 p-3">
+            <h4 className="mb-3">Upload new AI Prompts</h4>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <div className="mb-3">
+                <label className="form-label mb-1" htmlFor="title">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label mb-1" htmlFor="content">
+                  Content
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-outline-primary w-100 mt-3"
+              >
+                Add
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {sectionName === "heroes" && (
         <div className="card col-md-7 mx-auto mb-3 mt-4 p-3">
-          <h4 className="mb-3">Upload new {sectionName}</h4>
+          <h4 className="mb-3">Upload new Hero</h4>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-3">
               <label className="form-label mb-1" htmlFor="title">
@@ -115,7 +161,7 @@ function AdminUploadForm({ sectionName, onSubmit }) {
 
       {sectionName === "amenities" && (
         <div className="card col-md-7 mx-auto mb-3 mt-4 p-3">
-          <h4 className="mb-3">Upload new {sectionName}</h4>
+          <h4 className="mb-3">Upload new Amenity</h4>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-3">
               <label className="form-label mb-1" htmlFor="title">
@@ -153,7 +199,7 @@ function AdminUploadForm({ sectionName, onSubmit }) {
       )}
       {sectionName === "packages" && (
         <div className="card col-md-7 mx-auto mb-3 mt-4 p-3">
-          <h4 className="mb-3">Upload new {sectionName}</h4>
+          <h4 className="mb-3">Upload new Package</h4>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-3">
               <label className="form-label mb-1" htmlFor="title">

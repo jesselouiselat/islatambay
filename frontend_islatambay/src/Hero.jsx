@@ -1,4 +1,3 @@
-import islatambay_logo from "./assets/islatambay_logo.jpg";
 import AdminUploadForm from "./AdminUploadForm";
 import axiosInstance from "./api/AxiosInstance";
 import { useAuth } from "./context/UserContext";
@@ -12,7 +11,7 @@ function Hero() {
 
   async function getHeroes() {
     try {
-      const result = await axiosInstance.get("/api/admin/get-heroes");
+      const result = await axiosInstance.get("/api/admin/heroes/get-heroes");
       setHeroes(result.data);
     } catch (error) {
       console.error(error);
@@ -26,7 +25,7 @@ function Hero() {
   async function handleSubmit(formData) {
     try {
       const result = await axiosInstance.post(
-        "/api/admin/upload/heroes",
+        "/api/admin/heroes/add-heroes",
         formData
       );
       getHeroes();
@@ -40,13 +39,16 @@ function Hero() {
     console.log("Received:", id, title, public_id);
 
     try {
-      const result = await axiosInstance.delete("/api/admin/delete-heroes", {
-        params: {
-          id,
-          title,
-          public_id,
-        },
-      });
+      const result = await axiosInstance.delete(
+        "/api/admin/heroes/delete-heroes",
+        {
+          params: {
+            id,
+            title,
+            public_id,
+          },
+        }
+      );
       getHeroes();
       alert(result.data.message);
     } catch (error) {

@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await axiosInstance.get("/api/check-auth");
+        const res = await axiosInstance.get("/api/auth/check-auth");
         setUser(res.data.user);
       } catch (error) {
         if (error.response?.status === 401) {
@@ -30,7 +30,7 @@ export const UserProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const res = await axiosInstance.post("/api/logout");
+      const res = await axiosInstance.post("/api/auth/logout");
       setUser(null);
       navigate("/");
     } catch (error) {

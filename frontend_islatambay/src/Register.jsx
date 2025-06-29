@@ -31,7 +31,7 @@ function Register() {
 
     try {
       const res = await axiosInstance.post(
-        "/api/register",
+        "/api/auth/register",
         registrationDetails
       );
       console.log(res.data);

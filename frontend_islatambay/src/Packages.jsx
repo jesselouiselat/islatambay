@@ -11,7 +11,7 @@ function Packages() {
 
   async function getPackages() {
     try {
-      const result = await axiosInstance("/api/admin/get-pacakages");
+      const result = await axiosInstance("/api/admin/packages/get-packages");
 
       setPackages(result.data);
     } catch (error) {
@@ -26,7 +26,7 @@ function Packages() {
   async function handleSubmit(formData) {
     try {
       const res = await axiosInstance.post(
-        "/api/admin/upload/packages",
+        "/api/admin/packages/add-packages",
         formData
       );
       getPackages();
@@ -39,12 +39,15 @@ function Packages() {
 
   async function handleDelete(id, title) {
     try {
-      const result = await axiosInstance.delete("/api/admin/delete-packages", {
-        params: {
-          id,
-          title,
-        },
-      });
+      const result = await axiosInstance.delete(
+        "/api/admin/packages/delete-packages",
+        {
+          params: {
+            id,
+            title,
+          },
+        }
+      );
       getPackages();
       alert(result.data.message);
     } catch (error) {

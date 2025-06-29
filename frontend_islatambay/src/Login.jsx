@@ -31,7 +31,7 @@ function Login() {
         alert("Please fill both fields");
         return;
       }
-      const res = await axiosInstance.post("/api/login", loginDetails);
+      const res = await axiosInstance.post("/api/auth/login", loginDetails);
       setUser(res.data.user);
       navigate("/dashboard", { state: { message: "Login successfuly!" } });
       console.log(res.status);
