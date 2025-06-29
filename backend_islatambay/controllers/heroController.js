@@ -33,7 +33,7 @@ export const deleteHeroes = async (req, res) => {
   try {
     await cloudinary.uploader.destroy(public_id);
     const result = await pool.query("DELETE FROM heroes WHERE id = $1", [id]);
-    res.status(200).json({ message: `${title} is successfullt deleted` });
+    res.status(200).json({ message: `${title} is successfully deleted` });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
