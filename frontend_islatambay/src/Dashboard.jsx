@@ -31,7 +31,7 @@ function Dashboard() {
         <NavBar></NavBar>
 
         <div className="container">
-          <div className="row align-items-center">
+          <div className="row align-items-center justify-content-center">
             <div className="col">
               <Contact></Contact>
             </div>
