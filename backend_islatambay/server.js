@@ -20,8 +20,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://islatambay.vercel.app"],
-    // origin: ["http://localhost:5173", process.env.VERCEL_ORIGIN],
+    origin: ["http://localhost:5173", process.env.VERCEL_ORIGIN],
     credentials: true,
   })
 );
