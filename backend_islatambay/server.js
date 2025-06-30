@@ -30,10 +30,16 @@ app.use(
 
 app.use(
   session({
-    store: new PgSession({ pool, tableName: "session", logErrors: true }),
+    name: "connect.sid", // <- manually set cookie name
+    store: new PgSession({
+      pool,
+      tableName: "session",
+      logErrors: true,
+    }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    unset: "destroy", // <- important!
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,
