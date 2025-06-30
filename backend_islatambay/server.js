@@ -34,6 +34,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    logErrors: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,
@@ -48,19 +49,19 @@ configurePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/admin/heroes", heroRoutes);
-app.use("/api/admin/amenities", amenityRoutes);
-app.use("/api/admin/packages", packageRoutes);
-
 app.use((req, res, next) => {
   console.log("Session ID:", req.sessionID);
   console.log("Session:", req.session);
   console.log("User:", req.user);
   next();
 });
+
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/admin/heroes", heroRoutes);
+app.use("/api/admin/amenities", amenityRoutes);
+app.use("/api/admin/packages", packageRoutes);
 
 app.get("/debug-session", (req, res) => {
   res.json({
