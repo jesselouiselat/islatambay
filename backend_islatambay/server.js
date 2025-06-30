@@ -30,11 +30,10 @@ app.use(
 
 app.use(
   session({
-    store: new PgSession({ pool }),
+    store: new PgSession({ pool, tableName: "session", logErrors: true }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    logErrors: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,
@@ -68,6 +67,19 @@ app.get("/debug-session", (req, res) => {
     sessionID: req.sessionID,
     session: req.session,
     user: req.user,
+  });
+});
+
+app.get("/force-session", (req, res) => {
+  req.session.test = "hello";
+  req.session.save((err) => {
+    if (err) {
+      console.error("❌ Could not save session:", err);
+      res.status(500).send("Failed to save session");
+    } else {
+      console.log("✅ Forced session save with ID:", req.sessionID);
+      res.send("Session saved!");
+    }
   });
 });
 
