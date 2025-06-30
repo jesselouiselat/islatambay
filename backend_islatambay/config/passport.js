@@ -84,16 +84,21 @@ export function configurePassport(passport) {
   });
 
   passport.deserializeUser(async (id, done) => {
+    console.log("🔍 Running deserializeUser with ID:", id); // ADD THIS
+
     try {
       const result = await pool.query("SELECT * FROM users WHERE id = $1", [
         id,
       ]);
       if (result.rows.length > 0) {
+        console.log("✅ Found user in DB:", result.rows[0]); // ADD THIS
         return done(null, result.rows[0]);
       } else {
+        console.log("❌ No user found with ID:", id);
         return done(null, false);
       }
     } catch (error) {
+      console.error("❌ Error in deserializeUser:", error);
       return done(error);
     }
   });
