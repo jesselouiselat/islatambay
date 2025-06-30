@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import ChatBox from "./Chatbox";
+import Contact from "./Contact";
+import Footer from "./Footer";
 import { useAuth } from "./context/UserContext";
 
 import axiosInstance from "./api/AxiosInstance";
@@ -27,7 +29,19 @@ function Dashboard() {
     <section id="dashboard">
       <div>
         <NavBar></NavBar>
-        <ChatBox></ChatBox>
+
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col">
+              <Contact></Contact>
+            </div>
+            <div className="col">
+              <ChatBox></ChatBox>
+            </div>
+          </div>
+        </div>
+
+        <Footer></Footer>
       </div>
     </section>
   );

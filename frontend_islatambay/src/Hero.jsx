@@ -58,104 +58,106 @@ function Hero() {
   }
 
   return (
-    <>
-      {heroes.length > 0 ? (
-        <section
-          id="heroCarousel"
-          className="carousel slide p-4 mb-4 border rounded-4 shadow-lg"
-          data-bs-ride="carousel"
-        >
-          <div className="carousel-inner">
-            {heroes.map((hero) => (
-              <div className="carousel-item active" key={hero.id}>
-                <div className="row align-items-center g-0">
-                  <div className="col col-12 col-md-5 p-0">
-                    <div className="card border-0 text-center text-md-end">
-                      <div className="card-body">
-                        <h3 className="card-title">{hero.title}</h3>
-                        <p className="card-text">{hero.description}</p>
+    <section id="hero">
+      <>
+        {heroes.length > 0 ? (
+          <section
+            id="heroCarousel"
+            className="carousel slide p-4 mb-4 border rounded-4 shadow-lg"
+            data-bs-ride="carousel"
+          >
+            <div className="carousel-inner">
+              {heroes.map((hero) => (
+                <div className="carousel-item active" key={hero.id}>
+                  <div className="row align-items-center g-0">
+                    <div className="col col-12 col-md-5 p-0">
+                      <div className="card border-0 text-center text-md-end">
+                        <div className="card-body">
+                          <h3 className="card-title fs-3">{hero.title}</h3>
+                          <p className="card-text fs-5">{hero.description}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col col-12 col-md-7 p-0 justify-content-center ">
+                      <img
+                        className="mx-auto d-block w-75"
+                        src={hero.image}
+                        alt=""
+                      />
+                      <div className="d-flex justify-content-center align-items-center mt-4">
+                        {user && user.isAdmin && (
+                          <>
+                            <button
+                              className="btn btn-sm btn-outline-danger"
+                              onClick={() => setConfrimingId(hero.id)}
+                            >
+                              Delete
+                            </button>
+                            {confirmingId === hero.id && (
+                              <button
+                                className="btn btn-sm btn-danger ms-3"
+                                type="button"
+                                onClick={() =>
+                                  handleDelete(
+                                    hero.id,
+                                    hero.title,
+                                    hero.public_id
+                                  )
+                                }
+                              >
+                                Cofirm Delete
+                              </button>
+                            )}
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
-
-                  <div className="col col-12 col-md-7 p-0 justify-content-center ">
-                    <img
-                      className="mx-auto d-block w-75"
-                      src={hero.image}
-                      alt=""
-                    />
-                    <div className="d-flex justify-content-center align-items-center mt-4">
-                      {user && user.isAdmin && (
-                        <>
-                          <button
-                            className="btn btn-sm btn-outline-danger"
-                            onClick={() => setConfrimingId(hero.id)}
-                          >
-                            Delete
-                          </button>
-                          {confirmingId === hero.id && (
-                            <button
-                              className="btn btn-sm btn-danger ms-3"
-                              type="button"
-                              onClick={() =>
-                                handleDelete(
-                                  hero.id,
-                                  hero.title,
-                                  hero.public_id
-                                )
-                              }
-                            >
-                              Cofirm Delete
-                            </button>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <div className="carousel-indicators">
-            {heroes.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                data-bs-target="#heroCarousel"
-                data-bs-slide-to={index}
-                className="active"
-              ></button>
-            ))}
-          </div>
+            <div className="carousel-indicators">
+              {heroes.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  data-bs-target="#heroCarousel"
+                  data-bs-slide-to={index}
+                  className="active"
+                ></button>
+              ))}
+            </div>
 
-          <button
-            className="carousel-control-prev"
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide="prev"
-          >
-            <span className="carousel-control-prev-icon"></span>
-          </button>
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide="next"
-          >
-            <span className="carousel-control-next-icon"></span>
-          </button>
-        </section>
-      ) : null}
-      {user && user.isAdmin ? (
-        <>
-          <AdminUploadForm
-            sectionName="heroes"
-            onSubmit={(data) => handleSubmit(data)}
-          ></AdminUploadForm>
-        </>
-      ) : null}
-    </>
+            <button
+              className="carousel-control-prev"
+              type="button"
+              data-bs-target="#heroCarousel"
+              data-bs-slide="prev"
+            >
+              <span className="carousel-control-prev-icon"></span>
+            </button>
+            <button
+              className="carousel-control-next"
+              type="button"
+              data-bs-target="#heroCarousel"
+              data-bs-slide="next"
+            >
+              <span className="carousel-control-next-icon"></span>
+            </button>
+          </section>
+        ) : null}
+        {user && user.isAdmin ? (
+          <>
+            <AdminUploadForm
+              sectionName="heroes"
+              onSubmit={(data) => handleSubmit(data)}
+            ></AdminUploadForm>
+          </>
+        ) : null}
+      </>
+    </section>
   );
 }
 

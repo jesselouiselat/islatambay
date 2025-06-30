@@ -1,6 +1,6 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import Dashboard from "./Dashboard";
 import { useAuth } from "./context/UserContext";
+import sikaeom from "../src/assets/sikaeom_islatambay.png";
 
 function NavBar() {
   const { user, setUser, logout } = useAuth();
@@ -8,10 +8,10 @@ function NavBar() {
   const navigate = useNavigate();
 
   const navLinks = [
-    { path: "home", label: "Home" },
-    { path: "about", label: "About" },
+    { path: "hero", label: "Home" },
     { path: "amenities", label: "Amenities" },
     { path: "packages", label: "Packages" },
+    { path: "about", label: "About" },
     { path: "contact", label: "Contact" },
   ];
 
@@ -33,7 +33,7 @@ function NavBar() {
     <nav className="navbar border rounded-4 shadow-md navbar-expand-lg p-3 mt-2 mb-4 container-fluid bg-light sticky-top border-bottom">
       <div className="container-fluid">
         <NavLink to="/home" className="navbar-brand nav-link">
-          Sikaeom
+          <img src={sikaeom} alt="" style={{ height: "4rem" }} />
         </NavLink>
 
         <button

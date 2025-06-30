@@ -47,7 +47,7 @@ function Login() {
 
   return (
     <section className="d-flex text-center justify-content-center align-items-center vh-100">
-      <div className="col-5 form-signin p-3">
+      <div className="col-md-5 col-sm-12 form-signin p-3">
         <h1 className="h3  fw-normal">Please sign in to</h1>
         <h1 className="fs-bold">Sikaeom</h1>
 
@@ -58,6 +58,7 @@ function Login() {
               className="form-control rounded-1"
               onChange={handleChange}
               value={loginDetails.email}
+              s
               name="email"
               placeholder=""
             />

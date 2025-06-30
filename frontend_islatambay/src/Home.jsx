@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "./api/AxiosInstance";
 import Packages from "./Packages";
 import Amenities from "./Amenities";
 import Contact from "./Contact";
 import About from "./About";
 import Hero from "./Hero";
 import NavBar from "./NavBar";
+import TikTokEmbed from "./TiktokEmbed";
+import Footer from "./Footer";
 
 function Home() {
   return (
@@ -15,10 +14,12 @@ function Home() {
       {/* {loggedIn && isAdmin ? <AdminDashboard /> : null} */}
 
       <Hero />
+      <TikTokEmbed></TikTokEmbed>
       <Amenities />
       <Packages />
-      <Contact />
       <About />
+      <Contact />
+      <Footer />
     </div>
   );
 }

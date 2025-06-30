@@ -1,5 +1,6 @@
 import { Routes, Route, Router } from "react-router-dom";
 import Home from "./Home.jsx";
+import Hero from "./Hero.jsx";
 import Amenities from "./Amenities.jsx";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";

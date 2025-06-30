@@ -79,67 +79,80 @@ function AdminDashboard() {
       {user.isAdmin ? (
         <div>
           <NavBar />
-
-          <div id="packages" className="container border p-3 rounded-4">
-            <div className="pricing-header">
-              <h1 className="display-6 text-center">AI Prompts</h1>
-            </div>
-            <div className="row row-cols-1 row-cols-md-3 text-center justify-content-center">
-              {aiPrompts.map((prompt) => (
-                <div className="col h-100" key={prompt.id}>
-                  <div className="card h-100 d-flex flex-column rounded-4 m-4 shadow-lg p-3">
-                    <div className="card-header">
-                      <div
-                        className={`d-flex align-items-center ${
-                          user && user.isAdmin
-                            ? "justify-content-between"
-                            : "justify-content-center"
-                        }`}
-                      >
-                        <h5 className="p-1 mb-0 text-center">{prompt.title}</h5>{" "}
-                        {user && user.isAdmin && (
-                          <button
-                            className="btn btn-sm btn-outline-danger"
-                            type="button"
-                            onClick={() => setConfrimingId(prompt.id)}
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </div>
-
-                      {confirmingId === prompt.id && (
-                        <div className="mt-2">
-                          <button
-                            className="btn btn-danger w-100"
-                            onClick={() =>
-                              handleDelete(prompt.id, prompt.title)
-                            }
-                          >
-                            Confirm Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="card-body flex-grow-1">
-                      <p className="card-title pricing-card-title">
-                        {prompt.content}
-                      </p>
-                    </div>
-                  </div>
+          <div className="container ">
+            <div className="row align-items-center justify-content-center">
+              <div id="packages" className="col border p-3 rounded-4">
+                <div className="pricing-header">
+                  <h1 className="display-6 text-center">AI Prompts</h1>
                 </div>
-              ))}
+                <div className="table-responsive">
+                  <table className="table table-bordered table-striped align-middle">
+                    <thead className="table-info">
+                      <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {aiPrompts.map((prompt) => (
+                        <tr key={prompt.id}>
+                          <td>{prompt.title}</td>
+                          <td style={{ whiteSpace: "pre-wrap" }}>
+                            {prompt.content}
+                          </td>
+                          <td>
+                            {user &&
+                              user.isAdmin &&
+                              confirmingId !== prompt.id && (
+                                <button
+                                  className="btn btn-sm btn-outline-danger"
+                                  onClick={() => setConfrimingId(prompt.id)}
+                                >
+                                  Delete
+                                </button>
+                              )}
+
+                            {user &&
+                              user.isAdmin &&
+                              confirmingId === prompt.id && (
+                                <button
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() =>
+                                    handleDelete(prompt.id, prompt.title)
+                                  }
+                                >
+                                  Confirm Delete
+                                </button>
+                              )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="col">
+                <AdminUploadForm
+                  sectionName="aiPrompts"
+                  onSubmit={(data) => addPrompts(data)}
+                />
+              </div>
             </div>
           </div>
-
-          <AdminUploadForm
-            sectionName="aiPrompts"
-            onSubmit={(data) => addPrompts(data)}
-          />
-          <GetUserAdmins adminList={adminList} />
-          <PromoteToAdmin onSuccess={refreshAdminList} />
-          <RemoveAdmin onSuccess={refreshAdminList} />
+          <div className="container p-0 mt-4">
+            <GetUserAdmins adminList={adminList} />
+            <div className="container p-0">
+              <div className="row g-3">
+                <div className="col">
+                  <PromoteToAdmin onSuccess={refreshAdminList} />
+                </div>
+                <div className="col">
+                  <RemoveAdmin onSuccess={refreshAdminList} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <h1>Not Admin</h1>

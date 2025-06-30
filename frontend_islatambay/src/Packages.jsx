@@ -2,7 +2,7 @@ import { useAuth } from "./context/UserContext";
 import AdminUploadForm from "./AdminUploadForm";
 import axiosInstance from "./api/AxiosInstance";
 import { useEffect, useState } from "react";
-import { Button } from "react-scroll";
+import package_bg from "../src/assets/package-bg.png";
 
 function Packages() {
   const { user } = useAuth();
@@ -63,17 +63,24 @@ function Packages() {
       </div>
       <div className="row row-cols-1 row-cols-md-3 text-center justify-content-center">
         {packages.map((plan) => (
-          <div className="col h-100" key={plan.id}>
-            <div className="card h-100 d-flex flex-column rounded-4 m-4 shadow-lg p-3">
-              <div className="card-header">
+          <div className="col" key={plan.id}>
+            <div
+              className="card d-flex flex-column m-4 shadow-lg p-3"
+              style={{
+                backgroundImage: `url(${package_bg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                width: "15rem",
+                height: "25rem",
+                overflow: "hidden",
+              }}
+            >
+              <div className="card-header" style={{ flexShrink: 0 }}>
                 <div
-                  className={`d-flex align-items-center ${
-                    user && user.isAdmin
-                      ? "justify-content-between"
-                      : "justify-content-center"
-                  }`}
+                  className={`d-flex align-items-center justify-content-between`}
                 >
-                  <h5 className="p-1 mb-0 text-center">{plan.title}</h5>{" "}
+                  <h5 className="p-1 mb-0 text-center">{plan.title}</h5>
                   {user && user.isAdmin && (
                     <button
                       className="btn btn-sm btn-outline-danger"
@@ -97,7 +104,13 @@ function Packages() {
                 )}
               </div>
 
-              <div className="card-body flex-grow-1">
+              <div
+                className="card-body"
+                style={{
+                  overflowY: "auto",
+                  flex: "1 1 auto", // allows scroll if too long
+                }}
+              >
                 <h3 className="card-title pricing-card-title">
                   ₱ {plan.price}
                 </h3>

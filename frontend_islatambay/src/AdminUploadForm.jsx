@@ -66,8 +66,8 @@ function AdminUploadForm({ sectionName, onSubmit }) {
   return (
     <section>
       {sectionName === "aiPrompts" && (
-        <div className="container">
-          <div className="card col-md-7 mx-auto mb-3 mt-4 p-3">
+        <div className="container p-0">
+          <div className="card col-md-12   p-3">
             <h4 className="mb-3">Upload new AI Prompts</h4>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
               <div className="mb-3">
