@@ -14,7 +14,7 @@ import packageRoutes from "./routes/packageRoutes.js";
 import dotenv from "dotenv";
 
 dotenv.config();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 const app = express();
 
@@ -51,5 +51,5 @@ app.use("/api/admin/amenities", amenityRoutes);
 app.use("/api/admin/packages", packageRoutes);
 
 app.listen(port, () => {
-  console.log(`✅ Server ruuning on port ${port}`);
+  console.log(`✅ Server running on port ${port}`);
 });
