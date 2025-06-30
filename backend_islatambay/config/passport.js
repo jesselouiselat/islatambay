@@ -79,6 +79,7 @@ export function configurePassport(passport) {
   );
 
   passport.serializeUser((user, done) => {
+    console.log("✅ serializeUser:", user.id);
     done(null, user.id);
   });
 

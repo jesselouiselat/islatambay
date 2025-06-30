@@ -36,8 +36,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+      sameSite: "none",
     },
   })
 );
@@ -55,6 +55,17 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/admin/heroes", heroRoutes);
 app.use("/api/admin/amenities", amenityRoutes);
 app.use("/api/admin/packages", packageRoutes);
+
+app.use((req, res, next) => {
+  console.log("Current session ID:", req.sessionID);
+  console.log("Session data:", req.session);
+  next();
+});
+
+app.get("/force-session", (req, res) => {
+  req.session.test = "hello";
+  res.send("Session should be saved.");
+});
 
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
