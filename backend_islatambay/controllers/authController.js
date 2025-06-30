@@ -32,9 +32,14 @@ export const register = async (req, res) => {
           );
           const user = result.rows[0];
           req.logIn(user, (err) => {
-            console.log(err);
-            console.log(result);
-            res.status(200).json(result.rows);
+            if (err) {
+              console.log("Login error after registration:", err);
+              return res.status(500).json({ message: "Login error" });
+            }
+
+            req.session.save(() => {
+              res.status(200).json(result.rows);
+            });
           });
         }
       });
@@ -46,13 +51,15 @@ export const register = async (req, res) => {
 };
 
 export const logIn = async (req, res) => {
-  res.status(200).json({
-    message: "Login successful",
-    user: {
-      id: req.user.id,
-      email: req.user.email,
-      isAdmin: req.user.is_admin,
-    },
+  req.session.save(() => {
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: req.user.id,
+        email: req.user.email,
+        isAdmin: req.user.is_admin,
+      },
+    });
   });
 };
 
