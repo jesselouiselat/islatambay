@@ -55,6 +55,21 @@ app.use("/api/admin/heroes", heroRoutes);
 app.use("/api/admin/amenities", amenityRoutes);
 app.use("/api/admin/packages", packageRoutes);
 
+app.use((req, res, next) => {
+  console.log("Session ID:", req.sessionID);
+  console.log("Session:", req.session);
+  console.log("User:", req.user);
+  next();
+});
+
+app.get("/debug-session", (req, res) => {
+  res.json({
+    sessionID: req.sessionID,
+    session: req.session,
+    user: req.user,
+  });
+});
+
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
 });
