@@ -31,12 +31,12 @@ function Dashboard() {
         <NavBar></NavBar>
 
         <div className="container">
-          <div className="row align-items-center justify-content-center">
-            <div className="col">
-              <Contact></Contact>
+          <div className="row justify-content-center">
+            <div className="col-12 col-md-6 mb-3 d-flex justify-content-center">
+              <Contact />
             </div>
-            <div className="col">
-              <ChatBox></ChatBox>
+            <div className="col-12 col-md-6 d-flex justify-content-center">
+              <ChatBox />
             </div>
           </div>
         </div>

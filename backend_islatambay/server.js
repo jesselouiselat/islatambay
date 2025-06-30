@@ -3,6 +3,8 @@ import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import { configurePassport } from "./config/passport.js";
+import connectPgSimple from "connect-pg-simple";
+import { pool } from "./config/db.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -17,6 +19,7 @@ dotenv.config();
 const port = process.env.PORT || 5000;
 
 const app = express();
+const PgSession = connectPgSimple(session);
 
 app.use(
   cors({
@@ -27,11 +30,14 @@ app.use(
 
 app.use(
   session({
+    store: new PgSession({ pool }), // ✅ Correct usage
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
+      secure: process.env.NODE_ENV === "production", // ✅ safer for local vs live
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     },
   })
 );
