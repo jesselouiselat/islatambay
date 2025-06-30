@@ -23,7 +23,7 @@ const PgSession = connectPgSimple(session);
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", process.env.VERCEL_ORIGIN],
+    origin: process.env.VERCEL_ORIGIN,
     credentials: true,
   })
 );
@@ -43,7 +43,6 @@ app.use(
 );
 
 app.use(express.json());
-[];
 
 configurePassport(passport);
 app.use(passport.initialize());
@@ -55,17 +54,6 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/admin/heroes", heroRoutes);
 app.use("/api/admin/amenities", amenityRoutes);
 app.use("/api/admin/packages", packageRoutes);
-
-app.use((req, res, next) => {
-  console.log("Current session ID:", req.sessionID);
-  console.log("Session data:", req.session);
-  next();
-});
-
-app.get("/force-session", (req, res) => {
-  req.session.test = "hello";
-  res.send("Session should be saved.");
-});
 
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
