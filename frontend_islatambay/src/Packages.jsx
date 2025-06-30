@@ -63,7 +63,7 @@ function Packages() {
       </div>
       <div className="row row-cols-1 row-cols-md-3 text-center justify-content-center">
         {packages.map((plan) => (
-          <div className="col" key={plan.id}>
+          <div className="col-auto" key={plan.id}>
             <div
               className="card d-flex flex-column m-4 shadow-lg p-3"
               style={{
@@ -77,10 +77,11 @@ function Packages() {
               }}
             >
               <div className="card-header" style={{ flexShrink: 0 }}>
-                <div
-                  className={`d-flex align-items-center justify-content-between`}
-                >
-                  <h5 className="p-1 mb-0 text-center">{plan.title}</h5>
+                <div className={`d-flex align-items-center `}>
+                  <div className="w-100 text-center">
+                    <h5 className="mb-0">{plan.title}</h5>
+                  </div>
+
                   {user && user.isAdmin && (
                     <button
                       className="btn btn-sm btn-outline-danger"

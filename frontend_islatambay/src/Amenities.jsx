@@ -1,4 +1,3 @@
-import sikaeom_1 from "./assets/sikaeom_1.jpg";
 import AdminUploadForm from "./AdminUploadForm";
 import axiosInstance from "./api/AxiosInstance";
 import { useAuth } from "./context/UserContext";

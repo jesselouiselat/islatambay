@@ -56,6 +56,13 @@ export const logIn = async (req, res) => {
   });
 };
 
+export const logOut = async (req, res) => {
+  req.logOut((err) => {
+    if (err) return res.status(500).json({ message: "Logout failed" });
+    res.json({ message: "Logged out successfully!" });
+  });
+};
+
 export const checkAuth = async (req, res) => {
   if (req.isAuthenticated()) {
     res.json({
