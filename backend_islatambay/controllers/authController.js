@@ -52,16 +52,19 @@ export const register = async (req, res) => {
 
 export const logIn = async (req, res) => {
   req.login(req.user, (err) => {
-    if (err) return res.status(500).json({ message: "Login failed" });
+    if (err) {
+      console.log("❌ Login error:", err);
+      return res.status(500).json({ message: "Login failed" });
+    }
 
+    // ✅ Save AFTER passport attaches user to session
     req.session.save((err) => {
       if (err) {
-        console.error("❌ Session failed to save:", err);
-        return res.status(500).json({ message: "Session not saved" });
+        console.log("❌ Session not saved:", err);
+        return res.status(500).json({ message: "Session save failed" });
       }
 
       console.log("✅ Session saved with ID:", req.sessionID);
-
       res.status(200).json({
         message: "Login successful",
         user: {
