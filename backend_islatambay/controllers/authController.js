@@ -50,31 +50,44 @@ export const register = async (req, res) => {
   }
 };
 
-export const logIn = async (req, res) => {
-  req.login(req.user, (err) => {
+export const logIn = async (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) {
-      console.log("❌ Login error:", err);
+      console.error("❌ Auth error:", err);
       return res.status(500).json({ message: "Login failed" });
     }
 
-    // ✅ Save AFTER passport attaches user to session
-    req.session.save((err) => {
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // ✅ Log the user in (this attaches user to session)
+    req.login(user, (err) => {
       if (err) {
-        console.log("❌ Session not saved:", err);
-        return res.status(500).json({ message: "Session save failed" });
+        console.error("❌ Login attach error:", err);
+        return res.status(500).json({ message: "Session login failed" });
       }
 
-      console.log("✅ Session saved with ID:", req.sessionID);
-      res.status(200).json({
-        message: "Login successful",
-        user: {
-          id: req.user.id,
-          email: req.user.email,
-          isAdmin: req.user.is_admin,
-        },
+      // ✅ Save the session after login
+      req.session.save((err) => {
+        if (err) {
+          console.error("❌ Session save error:", err);
+          return res.status(500).json({ message: "Session not saved" });
+        }
+
+        console.log("✅ Session saved with ID:", req.sessionID);
+
+        res.status(200).json({
+          message: "Login successful",
+          user: {
+            id: user.id,
+            email: user.email,
+            isAdmin: user.is_admin,
+          },
+        });
       });
     });
-  });
+  })(req, res, next);
 };
 
 export const logOut = async (req, res) => {
