@@ -53,9 +53,9 @@ function Contact() {
         </div>
         {!user && (
           <div className="container">
-            <div className="row">
+            <div className="row gap-2">
               <div className="col-12">
-                <h3 className="mt-5">or Log in for more support</h3>
+                <h3 className="mt-5">Log in for more support</h3>
               </div>
               <div className="col-12">
                 <NavLink to="/login" className="btn btn-primary  me-3">

@@ -30,7 +30,7 @@ function NavBar() {
   }
 
   return (
-    <nav className="navbar border rounded-4 shadow-md navbar-expand-lg p-3 mt-2 mb-4 container-fluid bg-light sticky-top border-bottom">
+    <nav className="navbar border rounded-4 shadow-md navbar-expand-lg p-1 mt-2 mb-4 container-fluid bg-light sticky-top border-bottom">
       <div className="container-fluid">
         <NavLink to="/home" className="navbar-brand nav-link">
           <img src={sikaeom} alt="" style={{ height: "4rem" }} />
