@@ -51,14 +51,25 @@ export const register = async (req, res) => {
 };
 
 export const logIn = async (req, res) => {
-  req.session.save(() => {
-    res.status(200).json({
-      message: "Login successful",
-      user: {
-        id: req.user.id,
-        email: req.user.email,
-        isAdmin: req.user.is_admin,
-      },
+  req.login(req.user, (err) => {
+    if (err) return res.status(500).json({ message: "Login failed" });
+
+    req.session.save((err) => {
+      if (err) {
+        console.error("❌ Session failed to save:", err);
+        return res.status(500).json({ message: "Session not saved" });
+      }
+
+      console.log("✅ Session saved with ID:", req.sessionID);
+
+      res.status(200).json({
+        message: "Login successful",
+        user: {
+          id: req.user.id,
+          email: req.user.email,
+          isAdmin: req.user.is_admin,
+        },
+      });
     });
   });
 };
