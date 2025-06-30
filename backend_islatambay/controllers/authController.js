@@ -77,14 +77,17 @@ export const logIn = async (req, res, next) => {
 
         console.log("✅ Session saved with ID:", req.sessionID);
 
-        res.status(200).json({
-          message: "Login successful",
-          user: {
-            id: user.id,
-            email: user.email,
-            isAdmin: user.is_admin,
-          },
-        });
+        // ✅ Delay response just a tick to ensure session writes
+        setTimeout(() => {
+          res.status(200).json({
+            message: "Login successful",
+            user: {
+              id: user.id,
+              email: user.email,
+              isAdmin: user.is_admin,
+            },
+          });
+        }, 50);
       });
     });
   })(req, res, next);
