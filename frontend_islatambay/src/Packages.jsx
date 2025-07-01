@@ -57,7 +57,7 @@ function Packages() {
   }
 
   return (
-    <section id="packages" className="container border p-3 rounded-4">
+    <section id="packages" className="container  p-3 rounded-4">
       <div className="pricing-header">
         <h1 className="display-6 text-center">Freediving Packages</h1>
       </div>
@@ -76,7 +76,7 @@ function Packages() {
                 overflow: "hidden",
               }}
             >
-              <div className="card-header" style={{ flexShrink: 0 }}>
+              <div className="card-header bg-light" style={{ flexShrink: 0 }}>
                 <div className={`d-flex align-items-center `}>
                   <div className="w-100 text-center">
                     <h5 className="mb-0">{plan.title}</h5>

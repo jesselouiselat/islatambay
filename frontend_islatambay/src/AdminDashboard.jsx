@@ -155,7 +155,9 @@ function AdminDashboard() {
           </div>
         </div>
       ) : (
-        <h1>Not Admin</h1>
+        <>
+          <h1>Not Admin</h1>
+        </>
       )}
     </section>
   );

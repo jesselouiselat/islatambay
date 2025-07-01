@@ -85,7 +85,7 @@ function Amenities() {
                 {groupArray.map((amenity) => (
                   <div className="col mx-auto" key={amenity.id}>
                     <div
-                      className="card card-cover position-relative overflow-hidden text-white bg-dark rounded-5 shadow-lg"
+                      className="card card-cover position-relative overflow-hidden text-white  rounded-5 "
                       style={{
                         paddingTop: "177.77%",
                         backgroundImage: `url(${amenity.image})`,

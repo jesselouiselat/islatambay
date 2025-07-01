@@ -1,6 +1,5 @@
 import { Routes, Route, Router } from "react-router-dom";
 import Home from "./Home.jsx";
-import Hero from "./Hero.jsx";
 import Amenities from "./Amenities.jsx";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
@@ -18,14 +17,14 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/amenities" element={<Amenities />} />
 
-      <Route
+      {/* <Route
         path="/dashboard"
         element={
           <RequireAuth>
             <Dashboard />
           </RequireAuth>
         }
-      />
+      /> */}
       <Route
         path="/admin-dashboard"
         element={

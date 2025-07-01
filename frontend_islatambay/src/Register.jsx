@@ -37,7 +37,9 @@ function Register() {
       console.log(res.data);
       setUser(res.data);
 
-      navigate("/dashboard", { state: { message: "Registraion successful!" } });
+      navigate("/admin-dashboard", {
+        state: { message: "Registration successful!" },
+      });
     } catch (error) {
       if (error.response) {
         console.log(error);

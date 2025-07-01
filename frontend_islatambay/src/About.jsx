@@ -1,4 +1,4 @@
-import sikaeom from "../public/sikaeom.png";
+import sikaeom from "../src/assets/sikaeom_islatambay.png";
 import about_bg from "../src/assets/about-bg.png";
 import "./App.css";
 
@@ -14,23 +14,21 @@ function About(params) {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <h1 className="display-5 fw-bold">Sikeaom </h1>
-        <h2 className="display-6 mb-2">Islatambay </h2>
-        <img
-          className="d-block mx-auto mb-4 "
-          src={sikaeom}
-          alt=""
-          style={{ height: "8rem" }}
-        />
+        <img className="mb-3" src={sikaeom} alt="" style={{ height: "6rem" }} />
         <div className="col-lg-6 mx-auto mt-2">
           <p className="lead mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce magna
-            eros, mollis non eros at, interdum tincidunt nunc. Nulla aliquet
-            ante justo. Maecenas sollicitudin vitae arcu consequat feugiat.
-            Morbi ac lectus ac neque tincidunt consequat ac et neque. Sed
-            viverra id mi ac mollis. Nam eget urna auctor, sodales magna sit
-            amet, interdum ante. Vestibulum et fermentum enim. Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Vivamus gravida elementum mi.
+            ISLATAMBAY FREEDIVING is a beginner-friendly freediving experience
+            based in BinukboK, Bauan, Batangas. We offer safe and fun
+            breath-hold diving sessions for all ages, whether you're a complete
+            beginner, a kid, or just someone curious about the ocean. Our team
+            provides hands-on guidance and personalized coaching in a calm,
+            protected marine sanctuary. You’ll explore vibrant coral reefs, swim
+            alongside sea turtles, and experience the freedom of the underwater
+            world in just one breath. We keep things relaxed, welcoming, and
+            always focused on making freediving simple, safe, and memorable.
+            Sessions are held at Sikaeom Camp & Dive Resort and include all
+            gear, boat transfers, and coaching. Just bring yourself and we’ll
+            take care of the rest.{" "}
           </p>
         </div>
       </div>

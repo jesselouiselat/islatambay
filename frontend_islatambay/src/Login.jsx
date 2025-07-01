@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import axios from "axios";
 import axiosInstance from "./api/AxiosInstance";
 import GoogleLogin from "./GoogleLogin";
 import { useAuth } from "./context/UserContext";
+import sikaeom from "../src/assets/sikaeom_islatambay.png";
 
 import Register from "./Register";
 
@@ -33,7 +33,9 @@ function Login() {
       }
       const res = await axiosInstance.post("/api/auth/login", loginDetails);
       setUser(res.data.user);
-      navigate("/dashboard", { state: { message: "Login successfuly!" } });
+      navigate("/admin-dashboard", {
+        state: { message: "Login successfuly!" },
+      });
       console.log(res.status);
     } catch (error) {
       console.error(error);
@@ -49,7 +51,14 @@ function Login() {
     <section className="d-flex text-center justify-content-center align-items-center vh-100">
       <div className="col-md-5 col-sm-12 form-signin p-3">
         <h1 className="h3  fw-normal">Please sign in to</h1>
-        <h1 className="fs-bold">Sikaeom</h1>
+        <NavLink to="/home">
+          <img
+            className="mb-3"
+            src={sikaeom}
+            alt=""
+            style={{ height: "6rem" }}
+          />
+        </NavLink>
 
         <form action="" onSubmit={handleSubmit}>
           <div className="form-floating">
