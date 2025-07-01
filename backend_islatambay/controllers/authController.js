@@ -77,10 +77,6 @@ export const checkAuth = (req, res) => {
   }
 };
 
-export const google = passport.authenticate("google", {
-  scope: ["profile", "email"],
-});
-
 export const googleCallback = passport.authenticate("google", {
   successRedirect: isProduction
     ? `${process.env.VERCEL_ORIGIN}/dashboard`

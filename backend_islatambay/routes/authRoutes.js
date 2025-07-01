@@ -5,7 +5,6 @@ import {
   logOut,
   register,
   checkAuth,
-  google,
   googleCallback,
 } from "../controllers/authController.js";
 
@@ -17,7 +16,13 @@ router.post("/login", logIn);
 router.post("/logout", logOut);
 
 router.get("/check-auth", checkAuth);
-router.get("/google", google);
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
 router.get("/google/callback", googleCallback);
 
 export default router;
