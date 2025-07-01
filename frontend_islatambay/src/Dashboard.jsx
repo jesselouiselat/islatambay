@@ -35,7 +35,7 @@ function Dashboard() {
             <div className="col-12 col-md-6  order-md-0 order-1 mb-3 d-flex justify-content-center">
               <Contact />
             </div>
-            <div className="col-12 col-md-6 order-md-1 order-0 d-flex justify-content-center">
+            <div className="col-12 col-md-6 order-md-1 m-3 order-0 d-flex justify-content-center">
               <ChatBox />
             </div>
           </div>
