@@ -30,12 +30,12 @@ function Dashboard() {
       <div>
         <NavBar></NavBar>
 
-        <div className="container">
+        <div className="container p-3">
           <div className="row  align-items-center justify-content-center">
-            <div className="col-12 col-md-6  order-md-0 order-sm-1 mb-3 d-flex justify-content-center">
+            <div className="col-12 col-md-6  order-md-0 order-1 mb-3 d-flex justify-content-center">
               <Contact />
             </div>
-            <div className="col-12 col-md-6 order-md-1 order-sm-0 d-flex justify-content-center">
+            <div className="col-12 col-md-6 order-md-1 order-0 d-flex justify-content-center">
               <ChatBox />
             </div>
           </div>
