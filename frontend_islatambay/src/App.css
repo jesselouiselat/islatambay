@@ -1,0 +1,22 @@
+/* default - mobile */
+#aiChat {
+  position: fixed;
+  bottom: 9rem;
+  right: 2rem;
+  z-index: 9999;
+}
+
+/* for tablets */
+@media (min-width: 768px) {
+  #aiChat {
+    right: 6rem;
+  }
+}
+
+/* for desktops */
+@media (min-width: 992px) {
+  #aiChat {
+    right: 10rem;
+    bottom: 2rem;
+  }
+}

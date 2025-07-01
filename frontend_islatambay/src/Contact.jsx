@@ -51,7 +51,7 @@ function Contact() {
             </div>
           ))}
         </div>
-        {!user && (
+        {/* {!user && (
           <div className="container">
             <div className="row gap-2 ">
               <div className="col-12">
@@ -67,7 +67,7 @@ function Contact() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

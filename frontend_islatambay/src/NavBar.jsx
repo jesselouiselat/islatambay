@@ -68,9 +68,16 @@ function NavBar() {
                 >
                   Admin Dashboard
                 </NavLink>
+                <button
+                  className="btn btn-outline-danger ms-4"
+                  onClick={handleLogOut}
+                  type="button"
+                >
+                  Log Out
+                </button>
               </div>
             )}
-            <li className="ms-md-auto">
+            {/* <li className="ms-md-auto">
               {user ? (
                 <>
                   <NavLink className="btn btn-primary ms-4" to="/dashboard">
@@ -94,7 +101,7 @@ function NavBar() {
                   </NavLink>
                 </>
               )}
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
