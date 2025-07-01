@@ -74,7 +74,7 @@ function Amenities() {
         data-bs-ride="carousel"
       >
         <div className="carousel-inner px-4">
-          {divideAmenities(amenities, 3).map((groupArray, index) => (
+          {divideAmenities(amenities, 2).map((groupArray, index) => (
             <div
               className={`carousel-item ${
                 groupArray.length === 0 ? "" : "active"

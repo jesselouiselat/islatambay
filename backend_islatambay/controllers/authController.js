@@ -1,12 +1,15 @@
 import { pool } from "../config/db.js";
 import bcrypt from "bcrypt";
 import passport from "passport";
+import env from "dotenv";
 
+env.config;
 const saltRounds = 11;
+
+const isProduction = process.env.NODE_ENV === "production";
 
 export const register = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Received!", email, password);
 
   try {
     const checkResult = await pool.query(
@@ -14,93 +17,52 @@ export const register = async (req, res) => {
       [email]
     );
 
-    // Check if email already exists in the database. Server will suggest to log in
     if (checkResult.rows.length > 0) {
-      res
-        .status(400)
-        .json({ message: "Email already exists. Try logging in." });
-
-      // Server will record/save the registraion details to the database
-    } else {
-      bcrypt.hash(password, saltRounds, async (err, hash) => {
-        if (err) {
-          console.log("Error hashing the password:", err);
-        } else {
-          const result = await pool.query(
-            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
-            [email, hash]
-          );
-          const user = result.rows[0];
-          req.logIn(user, (err) => {
-            if (err) {
-              console.log("Login error after registration:", err);
-              return res.status(500).json({ message: "Login error" });
-            }
-
-            req.session.save(() => {
-              res.status(200).json(result.rows);
-            });
-          });
-        }
-      });
+      return res.status(400).json({ message: "Email already exists." });
     }
+
+    const hash = await bcrypt.hash(password, saltRounds);
+    const result = await pool.query(
+      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+      [email, hash]
+    );
+    const user = result.rows[0];
+
+    req.logIn(user, (err) => {
+      if (err) return res.status(500).json({ message: "Login error" });
+      req.session.save(() => res.status(200).json(result.rows));
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 export const logIn = async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      console.error("❌ Auth error:", err);
-      return res.status(500).json({ message: "Login failed" });
-    }
+    if (err) return res.status(500).json({ message: "Login failed" });
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // ✅ Log the user in (this attaches user to session)
     req.login(user, (err) => {
-      if (err) {
-        console.error("❌ Login attach error:", err);
-        return res.status(500).json({ message: "Session login failed" });
-      }
-
-      // ✅ Save the session after login
-      req.session.save((err) => {
-        if (err) {
-          console.error("❌ Session save error:", err);
-          return res.status(500).json({ message: "Session not saved" });
-        }
-
-        console.log("✅ Session saved with ID:", req.sessionID);
-
-        // ✅ Delay response just a tick to ensure session writes
-        setTimeout(() => {
-          res.status(200).json({
-            message: "Login successful",
-            user: {
-              id: user.id,
-              email: user.email,
-              isAdmin: user.is_admin,
-            },
-          });
-        }, 50);
+      if (err) return res.status(500).json({ message: "Login error" });
+      req.session.save(() => {
+        res.status(200).json({
+          message: "Login successful",
+          user: {
+            id: user.id,
+            email: user.email,
+            isAdmin: user.is_admin,
+          },
+        });
       });
     });
   })(req, res, next);
 };
 
-export const logOut = async (req, res) => {
-  req.logOut((err) => {
-    if (err) return res.status(500).json({ message: "Logout failed" });
-    res.json({ message: "Logged out successfully!" });
-  });
+export const logOut = (req, res) => {
+  req.logOut(() => res.json({ message: "Logged out" }));
 };
 
-export const checkAuth = async (req, res) => {
+export const checkAuth = (req, res) => {
   if (req.isAuthenticated()) {
     res.json({
       loggedIn: true,
@@ -120,6 +82,11 @@ export const google = passport.authenticate("google", {
 });
 
 export const googleCallback = passport.authenticate("google", {
-  successRedirect: "http://localhost:5173/dashboard",
-  failureRedirect: "http://localhost:5173/login",
+  successRedirect: isProduction
+    ? `${process.env.VERCEL_ORIGIN}/dashboard`
+    : "http://localhost:5173/dashboard",
+
+  failureRedirect: isProduction
+    ? `${process.env.VERCEL_ORIGIN}/login`
+    : "http://localhost:5173/login",
 });

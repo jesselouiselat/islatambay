@@ -7,6 +7,8 @@ import env from "dotenv";
 
 env.config();
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export function configurePassport(passport) {
   passport.use(
     "local",
@@ -21,26 +23,16 @@ export function configurePassport(passport) {
             "SELECT * FROM users WHERE email = $1",
             [email]
           );
-          // Check if there is a user in the database
-          if (result.rows.length > 0) {
-            const user = result.rows[0];
-            const storedHashedPassword = user.password;
-            // Compare the hashed password from the db to the user-entered password
-            bcrypt.compare(password, storedHashedPassword, (err, result) => {
-              if (err) {
-                console.log("Error comparing passwords", err);
-              } else {
-                if (result) {
-                  return done(null, user);
-                } else {
-                  return done(null, false, { message: "Incorrect password" });
-                }
-              }
-            });
-            // Respond with user not found
-          } else {
+
+          if (result.rows.length === 0) {
             return done(null, false, { message: "User not found." });
           }
+
+          const user = result.rows[0];
+          const match = await bcrypt.compare(password, user.password);
+
+          if (match) return done(null, user);
+          return done(null, false, { message: "Incorrect password" });
         } catch (error) {
           return done(error);
         }
@@ -54,51 +46,48 @@ export function configurePassport(passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        callbackURL: isProduction
+          ? process.env.GOOGLE_CALLBACK_URL
+          : "http://localhost:5000/api/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log("✅ Google profile:", profile);
-        const result = await pool.query(
-          "SELECT * FROM users WHERE email = $1",
-          [profile.email]
-        );
-
-        if (result.rows.length === 0) {
-          const newUser = await pool.query(
-            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
-            [profile.email, "google"]
+        try {
+          const result = await pool.query(
+            "SELECT * FROM users WHERE email = $1",
+            [profile.email]
           );
-          console.log(newUser);
 
-          done(null, newUser.rows[0]);
-        } else {
-          done(null, result.rows[0]);
+          if (result.rows.length === 0) {
+            const newUser = await pool.query(
+              "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+              [profile.email, "google"]
+            );
+            return done(null, newUser.rows[0]);
+          }
+
+          return done(null, result.rows[0]);
+        } catch (err) {
+          return done(err);
         }
       }
     )
   );
 
   passport.serializeUser((user, done) => {
-    console.log("✅ serializeUser:", user.id);
     done(null, user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    console.log("👀 Running deserializeUser with ID:", id); // Add this!
-
     try {
       const result = await pool.query("SELECT * FROM users WHERE id = $1", [
         id,
       ]);
       if (result.rows.length > 0) {
-        console.log("✅ Found user:", result.rows[0]); // Add this
         return done(null, result.rows[0]);
       } else {
-        console.log("❌ No user found with ID:", id);
         return done(null, false);
       }
     } catch (err) {
-      console.error("❌ Error in deserializeUser:", err);
       return done(err);
     }
   });

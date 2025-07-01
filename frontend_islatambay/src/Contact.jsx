@@ -31,7 +31,7 @@ function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-5 bg-light">
+    <section id="contact" className="py-5 ">
       <div className="container text-center">
         <h2 className="mb-4">Connect with Us</h2>
         <div className="row justify-content-center gap-3">
@@ -53,7 +53,7 @@ function Contact() {
         </div>
         {!user && (
           <div className="container">
-            <div className="row gap-2">
+            <div className="row gap-2 ">
               <div className="col-12">
                 <h3 className="mt-5">Log in for more support</h3>
               </div>
