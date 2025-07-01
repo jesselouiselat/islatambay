@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import env from "dotenv";
 
-env.config;
+env.config();
 const saltRounds = 11;
 
 const isProduction = process.env.NODE_ENV === "production";
