@@ -59,7 +59,9 @@ function Packages() {
   return (
     <section id="packages" className="container  p-3 rounded-4">
       <div className="pricing-header">
-        <h1 className="display-6 text-center">Freediving Packages</h1>
+        {packages.length > 0 && (
+          <h1 className="display-6 text-center">Freediving Packages</h1>
+        )}
       </div>
       <div className="row row-cols-1 row-cols-md-3 text-center justify-content-center">
         {packages.map((plan) => (

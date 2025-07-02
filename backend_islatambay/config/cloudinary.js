@@ -15,7 +15,7 @@ export const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "islatambay",
-    allowed_formats: ["jpg", "png", "jpeg"],
+    allowed_formats: ["jpg", "png", "jpeg", "gif"],
   },
 });
 
