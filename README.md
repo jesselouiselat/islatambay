@@ -27,13 +27,13 @@ This is a Freediving Resort Website that has hero, amenities, and packages secti
 
 ### Screenshots
 
-![Hero](../screenshots/screenshot%201.PNG)
-![Ammenities](../screenshots/screenshot%202.PNG)
-![About](../screenshots/screenshot%203.PNG)
-![Chatbot](../screenshots/screenshot%204.PNG)
-![Sign in](../screenshots/screenshot%205.PNG)
-![AI Prompts](../screenshots/screenshot%206.PNG)
-![Admin List](../screenshots/screenshot%207.PNG)
+![Hero](./screenshots/screenshot%201.PNG)
+![Ammenities](./screenshots/screenshot%202.PNG)
+![About](./screenshots/screenshot%203.PNG)
+![Chatbot](./screenshots/screenshot%204.PNG)
+![Sign in](./screenshots/screenshot%205.PNG)
+![AI Prompts](./screenshots/screenshot%206.PNG)
+![Admin List](./screenshots/screenshot%207.PNG)
 
 ---
 
