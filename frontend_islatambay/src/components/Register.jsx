@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import axios from "axios";
-import axiosInstance from "./api/AxiosInstance";
-import { useAuth } from "./context/UserContext";
+import axiosInstance from "../api/AxiosInstance";
+import { useAuth } from "../context/UserContext";
 
 import GoogleLogin from "./GoogleLogin";
 
@@ -13,6 +12,7 @@ function Register() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const { setUser } = useAuth();
 
@@ -28,6 +28,7 @@ function Register() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
 
     try {
       const res = await axiosInstance.post(
@@ -42,12 +43,9 @@ function Register() {
       });
     } catch (error) {
       if (error.response) {
+        setLoading(false);
         console.log(error);
-        console.error("Error response:", error.response.data.message);
-        alert(error.response.data.message); // Show user-friendly error
-      } else {
-        console.error("Error:", error.message);
-        alert("Something went wrong");
+        alert(error.response.data.message);
       }
     }
   }
@@ -85,7 +83,7 @@ function Register() {
           </div>
 
           <button className="w-100 btn btn-lg btn-success" type="submit">
-            Sign up
+            {loading ? <>Signing up...</> : <>Sign up</>}
           </button>
           <NavLink to="/login" className="w-100 btn btn-outline-primary mt-2">
             Log in

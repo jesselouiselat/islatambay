@@ -1,8 +1,8 @@
-import { useAuth } from "./context/UserContext";
+import { useAuth } from "../context/UserContext";
 import AdminUploadForm from "./AdminUploadForm";
-import axiosInstance from "./api/AxiosInstance";
+import axiosInstance from "../api/AxiosInstance";
 import { useEffect, useState } from "react";
-import package_bg from "../src/assets/package-bg.png";
+import package_bg from "../assets/package-bg.png";
 
 function Packages() {
   const { user } = useAuth();

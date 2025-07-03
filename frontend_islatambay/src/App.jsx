@@ -1,11 +1,11 @@
 import { Routes, Route, Router } from "react-router-dom";
-import Home from "./Home.jsx";
-import Amenities from "./Amenities.jsx";
-import Login from "./Login.jsx";
-import Register from "./Register.jsx";
-import Dashboard from "./Dashboard.jsx";
-import AdminDashboard from "./AdminDashboard.jsx";
-import RequireAuth from "./RequireAuth.jsx";
+import Home from "./components/Home.jsx";
+import Amenities from "./components/Amenities.jsx";
+import Login from "./components/Login.jsx";
+import Register from "./components/Register.jsx";
+import Dashboard from "./components/Dashboard.jsx";
+import AdminDashboard from "./components/AdminDashboard.jsx";
+import RequireAuth from "./components/RequireAuth.jsx";
 import "./App.css";
 
 function App() {

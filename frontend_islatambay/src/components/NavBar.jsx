@@ -1,6 +1,6 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "./context/UserContext";
-import sikaeom from "../src/assets/sikaeom_islatambay.png";
+import { useAuth } from "../context/UserContext";
+import sikaeom from "../assets/sikaeom_islatambay.png";
 
 function NavBar() {
   const { user, setUser, logout } = useAuth();

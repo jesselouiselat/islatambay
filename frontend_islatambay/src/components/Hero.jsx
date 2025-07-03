@@ -1,6 +1,6 @@
 import AdminUploadForm from "./AdminUploadForm";
-import axiosInstance from "./api/AxiosInstance";
-import { useAuth } from "./context/UserContext";
+import axiosInstance from "../api/AxiosInstance";
+import { useAuth } from "../context/UserContext";
 import { useState } from "react";
 import { useEffect } from "react";
 

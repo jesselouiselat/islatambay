@@ -1,5 +1,4 @@
-import { NavLink } from "react-router-dom";
-import { useAuth } from "./context/UserContext";
+import { useAuth } from "../context/UserContext";
 
 function Contact() {
   const { user } = useAuth();

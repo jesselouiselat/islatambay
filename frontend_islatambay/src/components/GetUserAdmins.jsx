@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosInstance from "./api/AxiosInstance";
+import axiosInstance from "../api/AxiosInstance";
 
 function GetUserAdmins({ adminList }) {
   return (

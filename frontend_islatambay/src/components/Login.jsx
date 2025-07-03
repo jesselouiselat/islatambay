@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import axiosInstance from "./api/AxiosInstance";
+import axiosInstance from "../api/AxiosInstance";
 import GoogleLogin from "./GoogleLogin";
-import { useAuth } from "./context/UserContext";
-import sikaeom from "../src/assets/sikaeom_islatambay.png";
-
+import { useAuth } from "../context/UserContext";
+import sikaeom from "../assets/sikaeom_islatambay.png";
 import Register from "./Register";
 
 function Login() {
@@ -15,6 +14,7 @@ function Login() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -26,8 +26,11 @@ function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
     try {
       if (!loginDetails.email || !loginDetails.password) {
+        setLoading(false);
+
         alert("Please fill both fields");
         return;
       }
@@ -40,6 +43,8 @@ function Login() {
     } catch (error) {
       console.error(error);
       if (error.response) {
+        setLoading(false);
+
         alert(error.response.data.message || "Something went wrong");
       } else {
         alert("Network error or server not responding");
@@ -88,7 +93,7 @@ function Login() {
           </div>
 
           <button className="w-100 btn btn-lg btn-primary" type="submit">
-            Log in
+            {loading ? <>Logging in...</> : <>Log in</>}
           </button>
           <NavLink
             to="/register"

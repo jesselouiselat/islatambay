@@ -1,6 +1,5 @@
-import sikaeom from "../src/assets/sikaeom_islatambay.png";
-import about_bg from "../src/assets/about-bg.png";
-import "./App.css";
+import sikaeom from "../assets/sikaeom_islatambay.png";
+import about_bg from "../assets/about-bg.png";
 
 function About(params) {
   return (

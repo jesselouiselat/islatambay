@@ -3,9 +3,9 @@ import NavBar from "./NavBar";
 import ChatBox from "./Chatbox";
 import Contact from "./Contact";
 import Footer from "./Footer";
-import { useAuth } from "./context/UserContext";
+import { useAuth } from "../context/UserContext";
 
-import axiosInstance from "./api/AxiosInstance";
+import axiosInstance from "../api/AxiosInstance";
 
 function Dashboard() {
   const { user, loading, logout, setUser } = useAuth();

@@ -3,8 +3,8 @@ import PromoteToAdmin from "./PromoteToAdmin";
 import GetUserAdmins from "./GetUserAdmins";
 import RemoveAdmin from "./RemoveAdmin";
 import AdminUploadForm from "./AdminUploadForm";
-import axiosInstance from "./api/AxiosInstance";
-import { useAuth } from "./context/UserContext";
+import axiosInstance from "../api/AxiosInstance";
+import { useAuth } from "../context/UserContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import axiosInstance from "./api/AxiosInstance";
-import chat_button_logo from "../src/assets/chat_button_logo.png";
-import chat_name from "../src/assets/chat-name.png";
+import axiosInstance from "../api/AxiosInstance";
+import chat_button_logo from "../assets/chat_button_logo.png";
+import chat_name from "../assets/chat-name.png";
 
 function ChatBox() {
   const [userInput, setUserInput] = useState("");
