@@ -43,13 +43,22 @@ function AdminUploadForm({ sectionName, onSubmit }) {
       if (sectionName === "heroes" || sectionName === "aiPrompts") {
         formData.append("description", description);
       }
-      formData.append("image", image);
+      if (image instanceof File) {
+        formData.append("image", image);
+      } else {
+        console.warn("Image is not a file:", image);
+      }
     }
 
     if (sectionName === "packages") {
       formData.append("title", title);
       formData.append("price", price);
       features.forEach((f, i) => formData.append(`features[${i}]`, f));
+    }
+
+    console.log("FormData before submit:");
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
     }
 
     onSubmit(formData);

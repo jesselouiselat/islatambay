@@ -13,8 +13,15 @@ export const getHeroes = async (req, res) => {
 
 export const addHeroes = async (req, res) => {
   const { title, description } = req.body;
-  const imageUrl = req.file.path;
-  const public_id = req.file.filename;
+  console.log("File received:", req.file);
+  console.log("Body received:", req.body);
+
+  if (!req.file) {
+    return res.status(400).json({ message: "No image file uploaded" });
+  }
+
+  const imageUrl = req.file.path || req.file.secure_url;
+  const public_id = req.file.filename || req.file.public_id;
 
   try {
     const result = await pool.query(
